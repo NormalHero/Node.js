@@ -1,0 +1,49 @@
+cookie-parser 모듈
+- 쿠키를 쉽게 설정하고 사용할 수 있게 도와주는 모듈
+- 익스프레스 객체에 미들웨어로 등록
+
+cookieParser() : 일반 쿠키를 사용
+cookieParser('암호화하기 위한 문자') : 암호화된 쿠키를 사용
+
+쿠키 설정
+res.cookie('키', '값', {
+    쿠키 생성 옵션
+});
+
+쿠키 생성 옵션
+maxAge : 만료시간을 밀리초 단위로 설정
+expires : 만료 시간을 GMT 시간으로 설정
+path : cookie의 경로를 설정. 기본 설정은 "/"
+
+쿠키 조회
+req.cookies.cookie : 일반 쿠키
+req.signedCookies.cookie : 암호화된 쿠키
+
+쿠키 삭제
+res.clearCookie('키', {path: '경로'});
+
+
+express-session 모듈
+세션을 관리하기 위한 익스프레스 미들웨어 모듈
+
+app.use(session({세션모듈의 옵션}));
+
+세션 모듈의 옵션
+recret : 쿠키를 임의로 변조하는 것을 방지하기 위한 값. 이 값을 통해서 세션을 암호화하여 저장
+resave : 세션을 언제나 저장할지 지정하는 값. 이 값을 false로 하는 것을 권장
+saveUninitialized : 세션이 저장되기 전에 saveUninitialized 상태로 미리 만들어어서 저장
+
+세션 초기 설정
+const 객체명 = req.session;
+객체명.변수 = 값;
+
+세션 변수 사용
+객체명.변수;
+
+세션 삭제
+req.session.destroy( () => {
+    세션 삭제시 처리할 문장;
+    ...
+});
+
+

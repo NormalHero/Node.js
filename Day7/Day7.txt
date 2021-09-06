@@ -1,0 +1,68 @@
+mysql 모듈
+- mysql과 연결하기 위한 모듈
+- mysql 모듈은 커넥션 풀을 사용하여 연결
+- 데이터베이스 연결 객체가 너무 많이 만들어지는 것을 막고 기존의 연결 객체를 재활용할 수 있음
+
+mysql 연결 설정 => config.json
+connectionLimit : 커넥션 풀에서 만들 수 있는 최대 연결 개수 설정
+host : 연결할 호스트 이름을 설정
+port : 데이터베이스가 사용하는 포트번호를 설정
+user : 데이터베이스 사용자 아이디를 설정
+password : 데이터베이스 사용자 비밀번호를 설정
+database : 데이터베이스 이름을 설정
+
+mysql.createPool(config파일) : 새로운 Pool 생성
+Pool이름.getConnection : Pool에서 Connection 가져오기
+* conn이름.release()를 통해 Pool을 반드시 반납해야 함.
+
+
+mongoose 모듈
+- MongoDB의 ODM(Object Data Mapping) 모듈
+- 하나의 컬렉션 안에 똑같은 속성을 가진 문서 객체를 반복적으로 넣어두면 데이터를 조회할 때도 어떤 속성들이 있는지 미리 알고 있는 상태에서 조회할 수 있음 -> 스키마 생성
+
+
+ODM(Object Data Mapping)
+데이터베이스와 객체지향 프로그래밍 언어 사이 호환되지 않는 데이터를 변환하는 프로그래밍 기법
+
+mongodb vs mongoose
+mongodb 
+예) 자바 jdbc 드라이버 (속도 빠름)
+mongoose
+예) 자바 Mybatis, Hibernate 와 같은 개념
+
+연결
+mongoose객체.connect(uri[, 옵션, 콜백]);
+uri : mongodb://ip:port/db명
+
+스키마
+- 데이터 유효성 검증을 위해 스키마를 사용
+- 데이터 타입 및 규약등 설정
+- 스키마에 사용되는 타입
+    String, Number, Date, Boolean, Array ..
+
+모델
+- 데이터베이스에서 데이터를 읽고 생성하고 수정하는 인터페이스를 정의해줌
+    mongoose객체.model(컬렉션명, 스키마명) // 컬렉션이름을 지정하지 않으면 1번째 매개변수에 s를 붙여 복수형으로 사용
+
+
+Passport 모듈
+- 세션을 내부적으로 처리해주는 패키지
+- 구글, 페이스북, 카카오톡 등 로그인 기능을 구현
+- 로컬로그인과 SNS로그인 모두 개발이 가능
+
+
+클라이언트             인증요청                   서버
+로컬계정            -------------->     기능개발(세션관리)  <-----> DB
+구글 페이스북 카카오톡   <--------       패스포트 모듈       <----->
+
+
+페이스북 개발자 센터
+https://developers.facebook.com/
+
+
+
+serializeUser()
+로그인 한 뒤 세션에 데이터를 저장할 때 어떤 정보를 저장할지를 결정
+
+deserializeUser()
+세션에 저장한 데이터로 로그인한 유저 정보를 복구하는데 사용

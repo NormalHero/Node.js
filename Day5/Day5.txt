@@ -1,0 +1,186 @@
+MongoDB
+
+MongoDB의 특징
+- NoSQL이기 때문에 관계형 데이터베이스의 테이블 개념이 없음
+- 데이터가 모인 하나의 단위를 컬렉션이라고 부름
+- 데이터를 정해 놓은 컬럼의 형태로 컬렉션에 넣어야 한다는 제약이 없음
+- MongoDB의 데이터베이스는 컬렉션의 집합
+- 컬렉션은 여러개의 문서 객체를 가질 수 있음
+    예) {"id":1, "userid":"apple", "userpw":"1111" .... }
+
+document -> collection -> database
+
+document
+- RDBMS의 record와 비슷한 개념
+- 데이터 구조가 한개 이상의 key-value-pair로 이루어져 있음
+- 동적인 스키마를 가지고 있음
+- 같은 collection 안에 있는 document끼리 다른 스키마를 가지고 있을 수 있음
+    예) {"id":1, "userid":"apple", "userpw":"1111"}
+        {"name":"김사과", "gender":"여자"}
+
+collection
+- document의 그룹
+- collection 내부에 document들이 위치
+- table과 비슷한 개념이지만 RDBMS와 달리 스키마를 따로 가지지 않음
+
+
+MongoDB의 문법
+
+데이터베이스 확인
+show dbs;
+
+데이터베이스 생성
+use 데이터베이스명;
+use frontend;
+* 데이터베이스가 없으면 생성, 있으면 선택
+* 데이터베이스에 자료가 없을 경우 show dbs에서 나타나지 않음
+
+컬렉션 생성
+db.createCollection('컬렉션명');
+db.createCollection('testCollection');
+
+컬렉션 확인
+show collections;
+
+컬렉션 삭제
+db.컬렉션명.drop();
+db.testCollection.drop();
+
+연습용 컬렉션 만들기
+db.createCollection("member");
+
+document 추가
+db.컬렉션명.insert(객체);
+db.member.insert({'userid':'apple','userpw':'1111'});
+db.member.insert({'userid':'banana','name':'반하나','gender':'여자'});
+
+db.member.insert({'userid':'orange','userpw':'2222','name':'오렌지','gender':'남자'});
+db.member.insert({'userid':'melon','userpw':'3333','name':'이메론','gender':'남자','point':500});
+db.member.insert({'userid':'cherry','userpw':'4444','name':'채리','gender':'여자','point':700});
+db.member.insert({'userid':'avocado','userpw':'5555','name':'안가도','gender':'남자','point':800});
+db.member.insert({'userid':'berry','userpw':'6666','name':'배애리','gender':'여자','point':1000});
+db.member.insert({'userid':'coconut','userpw':'7777','name':'고코넛','gender':'남자','point':300});
+db.member.insert({'userid':'ryuzy','userpw':'8888','name':'류지','gender':'남자','point':400});
+
+document 확인
+db.컬렉션명.find();
+db.member.find();
+
+db.컬렉션명.find().pretty();
+db.member.find().pretty();
+
+db.컬렉션명.find(객체).pretty();
+db.member.find({"userid":"apple"}).pretty();
+
+* _id는 각 document의 유일한 키로 쓰이는 값
+
+document의 비교연산
+$eq : 주어진 값과 일치하는 값을 찾음
+$gt : 주어진 값보다 큰 값을 찾음
+$gte : 주어진 값보다 크거나 같은 값을 찾음
+$lt : 주어진 값보다 작은 값을 찾음
+$lte : 주어진 값보다 작거나 같은 값을 찾음
+$ne : 주어진 값과 일치하지 않는 값을 찾음
+$in : 주어진 배열안에 속하는 값을 찾음
+$nin : 주어진 배열안에 속하지 않는 값을 찾음
+
+포인트가 700이상인 멤버를 검색
+db.member.find({"point":{$gte:700}}).pretty();
+
+document의 논리연산
+$and : 주어진 모든 조건이 true일 때 true인 결과를 찾음
+$or : 주어진 조건 중 하나라도 true일 때 true인 결과를 찾음
+$not : 주어진 조건이 false일 때 true, true일 때 false인 결과를 찾음
+
+아이디가 "cherry"이고 비밀번호가 "4444"인 멤버를 검색
+db.member.find({$and:[{"userid":"cherry"},{"userpw":"4444"}]}).pretty();
+
+문제.
+1. 이름이 "고코넛"인 멤버를 검색
+db.member.find({"name":"고코넛"}).pretty();
+2. 포인트가 800보다 작거나 같은 멤버를 검색
+db.member.find({"point":{$lte:800}}).pretty();
+3. 아이디가 "apple" 또는 "banana"인 멤버를 검색
+db.member.find({$or:[{"userid":"apple"},{"userid":"banana"}]}).pretty();
+4. 성별이 "여자"이고 포인트가 700이상인 멤버를 검색
+db.member.find({$and:[{"gender":"여자"},{"point":{$gte:700}}]}).pretty();
+
+
+document의 정렬
+db.컬렉션명.find().sort(객체)
+* 객체
+- {key:value} -> key는 데이터의 field이름, value의 값는 1(오름차순) 또는 -1(내림차순)
+- 여러 key를 입력할 수 있고, 먼저 입력한 key가 우선권을 갖음
+db.member.find().sort({"_id":-1}).pretty();
+
+
+document의 개수 제한
+limit() : 출력할 데이터 개수를 제한할 때 사용
+db.컬렉션명.find().limit(출력할 개수);
+db.member.find().limit(3).pretty();
+
+
+document 데이터 생략 후 출력
+skip() : 출력할 데이터의 시작부분을 설정할 경우 사용
+db.컬렉션명.find().skip(생략할 개수);
+db.member.find().skip(2).pretty();
+
+
+문제.
+member 컬렉션의 데이터를 아래와 같이 출력
+1. 
+apple
+banana
+orange
+db.member.find().limit(3).pretty();
+
+2.
+melon
+cherry
+avocado
+db.member.find().skip(3).limit(3).pretty();
+
+3.
+berry
+coconut
+ryuzy
+db.member.find().skip(6).limit(3).pretty();
+
+4.
+ryuzy
+coconut
+berry
+db.member.find().sort({"_id":-1}).limit(3).pretty();
+
+
+document의 수정
+1. 특정 field 업데이트
+db.컬렉션명.update(객체, {$set:바뀔객체});
+db.member.update({"userid":"avocado"},{$set:{name:"안카도"}});
+
+2. document replace
+db.컬렉션명.update(변경할 객체, 바뀔 객체);
+db.member.update({"_id":ObjectId("60a85fc287fc3f0eb24e8561")}, {"userid":"avocado","userpw":"5555","name":"안복도","gender":"남자","age":30,"point":900});
+* document replace는 _id가 바뀌지 않음
+
+3. 특정 field 제거
+db.컬렉션명.update(변경할 객체, {$unset:{제거할 객체}});
+db.member.update({name:"안복도"}, {$unset:{"age":1}});
+* age:1
+1 -> true의 의미
+
+--------------------------------------------------------------
+4. 특정 document가 존재하지 않을 경우 새로 추가
+db.컬렉션명.update(추가할 객체, 추가할 객체 .., {upsert: true});
+db.member.update({userid:"avocado"}, {"age":30, "kor":100, "eng":90, "math":70}, {upsert: true});
+--------------------------------------------------------------
+
+5. 여러 document의 특정 field를 수정
+db.컬렉션명.update(적용할 객체, $set:{수정할 객체}, {multi: true});
+point가 700보다 크거나 같은 document의 비밀번호를 모두 "1111"로 설정
+db.member.update({point:{$gte:700}}, {$set:{"userpw":"1111"}}, {multi: true});
+
+
+document의 삭제
+db.컬렉션명.remove(객체)
+db.member.remove({"_id":ObjectId("60a85fc287fc3f0eb24e8561")});

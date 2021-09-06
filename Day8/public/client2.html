@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클라이언트 2</title>
+    <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        'use strict';
+        let host;
+        let port;
+        let socket;
+
+        $(function(){
+            $("#connectButton").on('click', function(event){
+                console.log('connectButton');
+                host = $("#hostInput").val();   // 127.0.0.1
+                port = $("#portInput").val();   // 3000
+                connectToServer();
+            });
+            $("#sendButton").on('click', function(event){
+                const sender = $('#sender').val();
+                const data = $('#data').val();
+
+                const output = {sender:sender, commend:'chat', type:'text', data:data};
+                console.log(`서버로 보낼 메세지 : ${JSON.stringify(output)}`);
+                if(socket == undefined){
+                    alert('서버에 연결되지 않았습니다. 서버를 연결하세요.');
+                    return;
+                }
+                socket.emit('message', output);
+            });
+        });
+
+        function connectToServer(){
+            const url = `http://${host}:${port}`; // http://127.0.0.1:3000
+            socket = io.connect(url);
+            console.log('socket 객체 생성');
+            socket.on('connect', function(){
+                console.log('웹소켓 서버에 연결되었습니다!');
+                socket.on('message', function(message){
+                    console.log(JSON.stringify(message));
+                    println(`${message.sender} 💌 ${message.data}`)
+                })
+            });
+        }
+
+        function println(data){
+            $('#result').append(`<p>${data}</p>`);
+        }
+    </script>
+</head>
+<body>
+    <h2>클라이언트 2</h2>
+    <hr>
+    <p>접속 ip : <input type="text" id="hostInput" value="127.0.0.1"></p>
+    <p>port : <input type="text" id="portInput" value="3000"></p>
+    <p><input type="button" id="connectButton" value="서버접속"></p>
+    <hr>
+    <p>보내는 사람 아이디 : <input type="text" id="sender"></p>
+    <p>메세지 : <input type="text" id="data"> <input type="button" id="sendButton" value="입력"></p>
+    <hr>
+    <p>❤❤ 결과 ❤❤</p>
+    <div id="result"></div>
+</body>
+</html>

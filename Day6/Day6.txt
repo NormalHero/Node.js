@@ -1,0 +1,30 @@
+serve-static 모듈
+특정 폴더를 요청에 의해 직접 파일에 접근할 수 있도록 기능을 제공하는 익스플레스 미들웨어
+
+morgan 모듈
+로그를 관리하기 위한 별도의 라이브러리 모듈
+
+multer 모듈
+파일을 업로드하기 위한 익스프레스 미들웨어
+
+multer.diskStorage(
+    destination: 파일을 저장할 디렉토리 설정
+    filename: 파일이름을 설정
+)
+
+multer({
+    storage: diskStorage 설정객체
+    limits: {
+        files: 파일전송개수,
+        fileSize: 파일 전송 용량
+    }
+});
+
+
+moment.js
+날짜와 시간을 쉽게 다룰 수 있도록 도와주는 자바스크립트 라이브러리
+https://momentjs.com/
+
+
+jquery cdn
+https://code.jquery.com/

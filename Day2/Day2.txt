@@ -1,0 +1,97 @@
+Express 모듈
+
+get() : get으로 사용자 정보를 전달 받음
+use() : 미들웨어를 등록
+redirect() : 웹 페이지의 경로를 강제로 이동
+write() : 클라이언트에게 전송할 데이터를 작성
+
+이벤트
+request : 클라이언트가 서버에 요청할 때 발생하는 이벤트
+connection : 클라이언트가 접속할 때 발생하는 이벤트
+close : 서버가 종료될 때 발생하는 이벤트
+
+내장객체
+server 객체
+createServer() 메소드를 사용하여 생성
+
+request 객체
+클라이언트가 서버에게 전달하는 메세지(정보)를 담는 객체
+
+response 객체
+서버에서 클라이언트로 응답 메세지를 전송시켜주는 객체
+
+
+http://127.0.0.1:3000/?userid=apple
+
+PHP -> $userid = $_GET['userid'];
+
+Node.js -> const userid = req.query.userid;
+query : 클라이언트에서 GET방식으로 전송한 요청 파라미터를 확인
+body : 클라이언트에서 POST방식으로 전송한 요청 파라미터를 확인
+(단, post방식을 통한 요청 파라미터를 확인하려면 body-parser와 같은 모듈을 사용해야 함)
+
+
+Nodemon 사용
+서버 코드를 변경할 때마다 서버를 재시작하도록 하는 모듈
+
+npm install -g nodemon
+(-g 글로벌 설치)
+
+
+app.use(bodyParser.urlencoded({extended: false}));
+urlencoded()
+- body-parser를 사용하면 자동으로 req에 body속성이 추가되고 저장됨
+- 인코딩이 기본적으로 utf-8 임
+
+{extended: false}
+중첩된 객체표현을 허용할지 여부를 체크
+
+URL 파싱
+qs
+query-string
+
+
+포스트맨
+https://www.postman.com/downloads/
+
+REST ?
+(Representational State Transfer)
+자원을 이름으로 구분하여 해당 자원의 상태를 주고 받는 것을 의미
+
+Router 미들웨어
+- 사용자의 다양한 요청이 들어왔을때 use() 메소드로 설정한 미들웨어가 항상 호출되는 불편한 점을 개선
+
+Router 객체
+const 라우터객체 = express.Router();
+
+http://127.0.0.1:3000/member/login
+라우터객체.route('/member/login').get(실행할 함수);
+라우터객체.route('/member/login').post(실행할 함수);
+
+익스프레스에 Router 객체 적용
+app.use('/', 라우터객체);
+
+
+에러페이지 처리
+app.all('*', (req, res) => {
+    res.status(404).send('<h2>페이지를 찾을 수 없습니다.</h2>');
+})
+* Router를 적용 후에 사용
+
+
+템플릿 엔진
+- View를 구현하기 위한 템플릿
+
+EJS(Embedded JavaScript) 모듈
+- 특정한 형식인 파일로 부터 HTML 페이지를 생성하는 모듈
+
+EJS 파일 형식의 특수 코드를
+<% ~~~~ code ~~~ %> : 자바스크립트 코드를 입력하는 영역
+<%=변수%> : 데이터를 출력
+<%-변수%> : ejs파일 전체를 전달
+
+EJS 데이터 전달
+render() : 메소드의 매개 변수에 전달하고자 하는 데이터를 입력
+    ejs.render(data);
+
+

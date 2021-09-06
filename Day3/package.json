@@ -1,0 +1,18 @@
+{
+  "name": "Day3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon 5_module.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "jade": "^1.11.0",
+    "nodemailer": "^6.6.0"
+  }
+}
